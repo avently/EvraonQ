@@ -104,6 +104,7 @@ end
 
 function process_request(request)
     local statusOk, res, errFromRoute = pcall(route_command, request.c, request.p)
+    request.p = nil
     if statusOk then
         if not errFromRoute then
             request.r = res
@@ -149,7 +150,7 @@ function route_command(command, params)
     }
     local act = action[command]
     if act then
-        return action[command](), nil
+        return action[command]()
     else
         return nil, "No such function"
     end

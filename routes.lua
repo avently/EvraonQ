@@ -214,7 +214,7 @@ end
 
 function routes.send_transaction(transaction)
     local err = sendTransaction(transaction)
-    if err then
+    if err ~= "" then
         return nil, err
     else
         return true
