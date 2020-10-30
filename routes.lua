@@ -196,6 +196,9 @@ function routes.get_trades_by_num(orderNumber)
 end
 
 function routes.fill_order_with_trades_data(order)
+    if order.qty == order.balance then
+        return order
+    end
     local qty_of_trades = 0
     local price_qty = 0
     for i = 0, getNumberOf("trades") - 1 do
@@ -204,6 +207,9 @@ function routes.fill_order_with_trades_data(order)
             price_qty = price_qty + trade.price * trade.qty
             qty_of_trades = qty_of_trades + trade.qty
             order.last_trade_datetime_ex = trade.datetime
+        end
+        if qty_of_trades == order.qty then
+            break
         end
     end
     if qty_of_trades > 0 then
