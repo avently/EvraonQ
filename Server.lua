@@ -11,9 +11,15 @@ else
     scriptPath = utils.script_path()
 end
 local libDir
-if not getScriptPath or tonumber(string.match(getInfoParam("VERSION"), "%d+[.]%d+")) >= 8.5 then
+local quikVer
+if getScriptPath then
+    quikVer = tonumber(string.match(getInfoParam("VERSION"), "(%d+)[.]")) * 100 +
+        tonumber(string.match(getInfoParam("VERSION"), "%d+[.](%d+)[.]"))
+end
+
+if not getScriptPath or quikVer >= 805 then
     libDir = "53"
-elseif tonumber(string.match(getInfoParam("VERSION"), "%d+[.]%d+")) >= 8 then
+elseif quikVer >= 800 then
     libDir = "51-x64"
 else
     libDir = "51-x86"
