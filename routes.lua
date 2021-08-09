@@ -61,7 +61,7 @@ function routes.get_candlesticks(secCode, classCode, interval, limit, skip)
     local dataSource, err = CreateDataSource(classCode, secCode, tonumber(interval))
     local limit = tonumber(limit)
     if limit == 0 then
-        limit = 10000000
+        limit = 10000
     end
     local skip = tonumber(skip)
     if dataSource then
@@ -77,9 +77,9 @@ function routes.get_candlesticks(secCode, classCode, interval, limit, skip)
             return nil
         end
 
-        local start = math.max(1, size - limit - skip)
+        local start = math.max(1, size - limit - skip + 1)
         local to = math.min(size, start - 1 + limit)
-        for i = start - 1, to do
+        for i = start, to do
             local candle = {}
             candle.O = dataSource:O(i)
             candle.H = dataSource:H(i)
@@ -89,6 +89,7 @@ function routes.get_candlesticks(secCode, classCode, interval, limit, skip)
             candle.T = dataSource:T(i)
             table.insert(res, candle)
         end
+        --log_e("Candles start " .. start .. " to " .. to .. " skip " .. skip .. " limit " .. limit .. " size " .. size)
         dataSource:Close()
         return res
     else
